@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>FanForge — Front Page</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <!-- AOS placeholder (optional) -->
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css" />
+</head>
+<body>
+  <main class="centered">
+    <header class="site-header">
+      <div class="container">
+        <a class="logo" href="frontpage.html"> FanForge</a>
+        <nav class="top-nav">
+          <a href="frontpage.html">Home</a>
+          <a href="#howitworks">How It Works</a>
+          <a href="#features">Features</a>
+          <a href="#pricing">Pricing</a>
+          <a href="enter-email.html">Waitlist</a>
+        </nav>
+        <div style="display:flex;align-items:center;gap:10px">
+          <a class="muted" href="admin.html" style="font-weight:700">Login</a>
+          <a class="primary" href="enter-email.html">Join Waitlist</a>
+          <button class="hamburger" id="hamburgerBtn" aria-label="Open menu">☰</button>
+        </div>
+      </div>
+    </header>
+    <nav class="mobile-nav" id="mobileNav" aria-hidden="true">
+      <div class="close"><button id="mobileClose" class="hamburger" aria-label="Close menu">✕</button></div>
+      <a href="frontpage.html">Home</a>
+      <a href="#howitworks">How It Works</a>
+      <a href="#features">Features</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#waitlist">Join Waitlist</a>
+      <hr style="margin:12px 0;border-color:rgba(255,255,255,0.04)">
+      <a href="#">About</a>
+      <a href="#">FAQ</a>
+      <a href="#">Contact</a>
+    </nav>
+
+    <!-- HERO -->
+    <section id="hero" class="hero reveal">
+      <div class="hero-content container-max">
+        <h1 class="hero-title">Your Favorite Celebrities. Your Personal AI Chat.</h1>
+        <p class="hero-sub">Turn idolisation into a real, personal experience — anytime, anywhere.</p>
+        <p class="hero-lead">Instant, personalized messages, voice notes, and exclusive updates — feel the connection that social media can’t give.</p>
+        <div style="margin-top:18px">
+          <a class="primary hero-cta" href="#waitlist">Join the Waitlist — Be the First</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section id="features" class="section reveal">
+      <div class="container-max">
+        <h2 style="text-align:center;margin-bottom:18px">Features</h2>
+        <div class="feature-grid">
+          <div class="feature-card">
+            <div class="icon" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2a7 7 0 0 0-7 7v3a7 7 0 0 0 7 7 7 7 0 0 0 7-7V9a7 7 0 0 0-7-7z" stroke="currentColor" stroke-width="1.2"/></svg>
+            </div>
+            <h4>Instant Conversations</h4>
+            <p>Chat 1‑to‑1 with AI versions of your favorite stars.</p>
+          </div>
+          <div class="feature-card">
+            <div class="icon" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 3v18" stroke="currentColor" stroke-width="1.2"/></svg>
+            </div>
+            <h4>Personalized Messages</h4>
+            <p>AI replies tailored just for you — notifications and meaningful replies.</p>
+          </div>
+          <div class="feature-card">
+            <div class="icon" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="1.2"/></svg>
+            </div>
+            <h4>Premium Fan Tiers</h4>
+            <p>Unlock exclusive interactions and perks with premium tiers coming soon.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section id="howitworks" class="section reveal">
+      <div class="container-max">
+        <h2 style="text-align:center;margin-bottom:18px">How It Works</h2>
+        <div class="how-steps">
+          <div class="step">
+            <div class="num">1</div>
+            <h4>Sign Up</h4>
+            <p>Join the platform in seconds with your email.</p>
+          </div>
+          <div class="step">
+            <div class="num">2</div>
+            <h4>Pick Your Celeb</h4>
+            <p>Choose an AI persona of your favourite star.</p>
+          </div>
+          <div class="step">
+            <div class="num">3</div>
+            <h4>Start Chatting</h4>
+            <p>Enjoy personal AI-driven conversations instantly.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRICING (MVP) -->
+    <section id="pricing" class="section reveal">
+      <div class="container-max" style="text-align:center">
+        <h2>Pricing</h2>
+        <p class="muted">Starting with free access — premium tiers coming soon.</p>
+        <div style="margin-top:18px">
+          <a class="primary" href="#waitlist">Join Early Access</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- WAITLIST / EMAIL CAPTURE -->
+    <section id="waitlist" class="waitlist reveal">
+      <div class="container-max">
+        <h2 style="text-align:center">Reserve Your Spot</h2>
+        <p class="muted" style="text-align:center">Be the first to try FanForge. Early signups get priority access.</p>
+        <form id="waitlistForm" class="form" onsubmit="return false;">
+          <input id="w_name" type="text" placeholder="Your name (optional)">
+          <input id="w_email" type="email" placeholder="Your email" required>
+          <button id="w_submit" type="submit">Reserve Your Spot</button>
+        </form>
+        <div id="waitlistMsg" style="margin-top:12px;color:var(--muted)"></div>
+      </div>
+    </section>
+
+    <section class="section reveal">
+      <h2>What Is FanForge?</h2>
+      <p class="muted">FanForge is a private fan platform where fans connect with their favourite celebrities, creators, sports icons, and fictional universes — in a way social media never allowed.</p>
+      <p class="muted"><strong>No noise.<br>No algorithms.<br>Just you and the fandom.</strong></p>
+    </section>
+
+    <section class="section reveal">
+      <h2>Why Fans Love FanForge</h2>
+      <ul class="features">
+        <li><strong>Feels personal</strong><br>Messages, updates, and content that feel direct — not broadcasted.</li>
+        <li><strong>Always active</strong><br>Your fandom doesn’t go silent between releases, matches, or movies.</li>
+        <li><strong>Exclusive access</strong><br>Behind-the-scenes drops, early updates, and fan-only moments.</li>
+        <li><strong>Built for real fans</strong><br>Not for scrolling. For belonging.</li>
+      </ul>
+    </section>
+
+    <section class="section reveal">
+      <h2>What You Can Do</h2>
+      <ul class="features">
+        <li>Follow your favourite stars, teams, music artists, and universes</li>
+        <li>Receive real-time updates and exclusive content</li>
+        <li>Be part of private fan spaces</li>
+        <li>Unlock premium fan experiences</li>
+        <li>Connect deeper than any social media platform</li>
+      </ul>
+    </section>
+
+    <section class="section reveal">
+      <h2>Categories on FanForge</h2>
+      <div class="categories">
+        <div class="cat"><strong>🎬 Celebrities</strong><br>Actors, actresses, creators, influencers</div>
+        <div class="cat"><strong>🎵 Music</strong><br>Artists, bands, albums, tours</div>
+        <div class="cat"><strong>🏏 Sports</strong><br>Players, teams, leagues, tournaments</div>
+        <div class="cat"><strong>🌌 Universes</strong><br>Movies, franchises, characters, fandom worlds</div>
+      </div>
+    </section>
+
+    <section class="section reveal">
+      <h2>Premium, But For Everyone</h2>
+      <p class="muted">FanForge is designed to be accessible, not elite.</p>
+      <p class="muted">Start free.<br>Upgrade when you want more.<br>Pay only for what you love.</p>
+      <p class="muted">No hidden costs.<br>No unnecessary noise.</p>
+      <p class="muted">Built for India. Ready for the World.</p>
+      <p class="muted">India has the strongest fan culture on the planet.<br>FanForge is built for that energy. From cinema to cricket. From music to global fandoms.</p>
+      <a class="primary hero-cta" href="enter-email.html">Join the FanForge Waitlist</a>
+    </section>
+
+    <section class="section reveal">
+      <h2>Call to Action</h2>
+      <p class="muted">Be there from day one. Early users get priority access, exclusive drops, and founder benefits.</p>
+      <a class="primary hero-cta" href="enter-email.html">Join the FanForge Waitlist</a>
+    </section>
+
+    <footer class="site-footer reveal">
+      <div class="columns">
+        <div class="col">
+          <h4>FanForge</h4>
+          <p>Your private fan platform — real conversations, exclusive access.</p>
+          <a class="cta-small" href="enter-email.html">Join the waitlist</a>
+        </div>
+        <div class="col links">
+          <h4>Product</h4>
+          <a href="#">Features</a>
+          <a href="#">Pricing</a>
+          <a href="#">Categories</a>
+        </div>
+        <div class="col links">
+          <h4>Company</h4>
+          <a href="#">About</a>
+          <a href="#">Careers</a>
+          <a href="#">Blog</a>
+        </div>
+        <div class="col links">
+          <h4>Legal</h4>
+          <a href="#">Privacy</a>
+          <a href="#">Terms</a>
+        </div>
+      </div>
+      <div class="site-footer-bottom">
+        <small>© 2025 FanForge — All rights reserved.</small>
+        <small>Contact: hello@fanforge.com</small>
+      </div>
+    </footer>
+  </main>
+
+  <script src="scripts.js"></script>
+</body>
+</html>

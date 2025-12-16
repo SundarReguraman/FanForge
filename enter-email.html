@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Fanforge — Enter Email</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css" />
+</head>
+<body>
+  <main class="centered">
+    <header class="site-header">
+      <div class="container">
+        <a class="logo" href="frontpage.html">FanForge</a>
+        <nav class="top-nav">
+          <a href="frontpage.html">Home</a>
+          <a href="enter-email.html">Join</a>
+          <a href="plans.html">Plans</a>
+          <a href="admin.html">Admin</a>
+        </nav>
+        <div style="display:flex;align-items:center;gap:10px">
+          <a class="muted" href="admin.html" style="font-weight:700">Login</a>
+          <a class="primary" href="enter-email.html">Join Waitlist</a>
+          <button class="hamburger" id="hamburgerBtnLocal" aria-label="Open menu">☰</button>
+        </div>
+      </div>
+    </header>
+    <nav class="mobile-nav" id="mobileNavLocal" aria-hidden="true">
+      <div class="close"><button id="mobileCloseLocal" class="hamburger" aria-label="Close menu">✕</button></div>
+      <a href="frontpage.html">Home</a>
+      <a href="enter-email.html">Join</a>
+      <a href="plans.html">Plans</a>
+      <a href="admin.html">Admin</a>
+    </nav>
+    <h2>Enter mail id</h2>
+    <form id="emailForm" class="email-form">
+      <input id="emailInput" type="email" placeholder="Enter mail id" required />
+      <div id="emailError" class="error" aria-live="polite"></div>
+      <button type="submit" class="primary">Submit</button>
+    </form>
+    
+    <footer class="site-footer reveal">
+      <div class="columns">
+        <div class="col">
+          <h4>FanForge</h4>
+          <p>Your private fan platform — real conversations, exclusive access.</p>
+        </div>
+        <div class="col links">
+          <h4>Help</h4>
+          <a href="#">Support</a>
+          <a href="#">FAQ</a>
+        </div>
+        <div class="col links">
+          <h4>Legal</h4>
+          <a href="#">Privacy</a>
+          <a href="#">Terms</a>
+        </div>
+      </div>
+      <div class="site-footer-bottom">
+        <small>© 2025 FanForge — All rights reserved.</small>
+        <small>Contact: hello@fanforge.example</small>
+      </div>
+    </footer>
+  </main>
+
+  <script src="scripts.js"></script>
+</body>
+</html>

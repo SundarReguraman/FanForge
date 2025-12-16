@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Fanforge — Subscriptions (Admin)</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .list{max-width:900px;margin:16px auto;text-align:left}
+    .entry{padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.03);display:flex;justify-content:space-between}
+    .tools{margin:12px 0;display:flex;gap:8px}
+    .small{font-size:0.9rem;color:var(--muted)}
+    .download{background:transparent;border:1px solid var(--accent);color:var(--accent);padding:8px;border-radius:8px;cursor:pointer}
+  </style>
+</head>
+<body>
+  <main class="centered">
+    <h2>Subscriptions (Admin)</h2>
+    <p class="small">This page fetches `GET /subscriptions` and lists saved entries from `subscriptions.json`.</p>
+
+    <div class="tools">
+      <button id="refresh" class="primary">Refresh</button>
+      <button id="download" class="download">Download JSON</button>
+      <button id="copyEmails" class="download">Copy Emails</button>
+      <input id="adminToken" placeholder="admin token" style="padding:8px;border-radius:6px;border:1px solid #223;min-width:180px" />
+      <button id="saveToken" class="download">Set Token</button>
+      <button id="downloadVisits" class="download">Download Visits CSV</button>
+    </div>
+
+    <div id="counts" class="small" style="margin-top:8px"></div>
+    <div id="list" class="list"></div>
+  </main>
+
+  <script>
+    function getToken(){
+      return sessionStorage.getItem('fanforge_admin_token') || document.getElementById('adminToken').value || '';
+    }
+
+    async function load(){
+      const el = document.getElementById('list');
+      el.innerHTML = 'Loading...';
+      try{
+        const token = getToken();
+        const r = await fetch('/subscriptions', { headers: token ? { 'x-admin-token': token } : {} });
+        if(r.status === 401){ el.innerHTML = '<div class="small">Unauthorized. Set admin token.</div>'; return; }
+          const j = await r.json();
+          const data = (j && j.data) || [];
+        if(!data.length){ el.innerHTML = '<div class="small">No subscriptions yet.</div>'; return; }
+        el.innerHTML = data.map(function(item, idx){
+          const email = (item.email||'');
+          const esc = encodeURIComponent(email);
+          return '<div class="entry"><div><strong>' + email + '</strong><div class="small">' + (item.ts||'') + '</div></div><div style="display:flex;gap:8px;align-items:center"><div class="small">' + (item.plan||'') + '</div><button class="del" data-email="'+esc+'">Delete</button></div></div>';
+        }).join('');
+        // store last fetched data for download/copy
+        window.__fanforge_subs = data;
+
+        // also fetch counts
+        try{
+          const rc = await fetch('/counts', { headers: token ? { 'x-admin-token': token } : {} });
+          if(rc.status === 200){
+            const jc = await rc.json();
+            const c = (jc && jc.counts) || {};
+            document.getElementById('counts').textContent = 'Counts — Monthly: ' + (c.Monthly||0) + ' | Yearly: ' + (c.Yearly||0);
+          }
+        }catch(e){}
+
+        // attach delete handlers
+        Array.from(document.querySelectorAll('.del')).forEach(function(b){
+          b.addEventListener('click', async function(){
+            if(!confirm('Delete '+ decodeURIComponent(b.getAttribute('data-email')) + '?')) return;
+            const token = getToken();
+            const url = '/subscriptions/' + b.getAttribute('data-email');
+            const r = await fetch(url, { method: 'DELETE', headers: token ? { 'x-admin-token': token } : {} });
+            if(r.ok){ alert('Deleted'); load(); } else { alert('Delete failed'); }
+          });
+        });
+
+      }catch(e){ el.innerHTML = '<div class="small">Failed to load: '+ (e.message||e) +'</div>'; }
+    }
+
+    document.getElementById('refresh').addEventListener('click', load);
+    document.getElementById('download').addEventListener('click', function(){
+      const data = window.__fanforge_subs || [];
+      const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = 'subscriptions.json'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+    });
+    document.getElementById('copyEmails').addEventListener('click', function(){
+      const data = window.__fanforge_subs || [];
+      const txt = data.map(d => d.email).filter(Boolean).join('\n');
+      if(!txt){ alert('No emails to copy'); return; }
+      navigator.clipboard.writeText(txt).then(function(){ alert('Copied '+data.length+' emails to clipboard'); }, function(){ alert('Copy failed'); });
+    });
+
+    document.getElementById('saveToken').addEventListener('click', function(){
+      const v = document.getElementById('adminToken').value || '';
+      if(!v) { alert('Enter a token'); return; }
+      sessionStorage.setItem('fanforge_admin_token', v);
+      alert('Token saved to session. Refreshing...');
+      load();
+    });
+
+    document.getElementById('downloadVisits').addEventListener('click', function(){
+      const token = getToken();
+      const headers = token ? { 'x-admin-token': token } : {};
+      fetch('/export/visits.csv', { headers: headers }).then(function(r){
+        if(!r.ok) { alert('Export failed'); return; }
+        return r.blob();
+      }).then(function(blob){
+        if(!blob) return;
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a'); a.href = url; a.download = 'visits.csv'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+      }).catch(function(){ alert('Export failed'); });
+    });
+
+    // initial load
+    load();
+  </script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+{
+  "name": "fanforge-site",
+  "version": "1.0.0",
+  "description": "Fanforge demo site with simple Express backend",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5"
+  }
+}
