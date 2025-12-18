@@ -4,11 +4,12 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>FanForge — Front Page</title>
+  
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Montserrat:wght@700;800&family=Inter:wght@300;400;600;700&family=Orbitron:wght@600;800&display=swap" rel="stylesheet">
+  
   <link rel="stylesheet" href="styles.css">
-  <!-- AOS placeholder (optional) -->
   <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css" />
 </head>
 <body>
@@ -30,6 +31,7 @@
         </div>
       </div>
     </header>
+
     <nav class="mobile-nav" id="mobileNav" aria-hidden="true">
       <div class="close"><button id="mobileClose" class="hamburger" aria-label="Close menu">✕</button></div>
       <a href="frontpage.html">Home</a>
@@ -43,7 +45,6 @@
       <a href="#">Contact</a>
     </nav>
 
-    <!-- HERO -->
     <section id="hero" class="hero reveal">
       <div class="hero-content container-max">
         <h1 class="hero-title">Your Favorite Celebrities. Your Personal AI Chat.</h1>
@@ -55,7 +56,6 @@
       </div>
     </section>
 
-    <!-- FEATURES -->
     <section id="features" class="section reveal">
       <div class="container-max">
         <h2 style="text-align:center;margin-bottom:18px">Features</h2>
@@ -85,7 +85,6 @@
       </div>
     </section>
 
-    <!-- HOW IT WORKS -->
     <section id="howitworks" class="section reveal">
       <div class="container-max">
         <h2 style="text-align:center;margin-bottom:18px">How It Works</h2>
@@ -109,7 +108,6 @@
       </div>
     </section>
 
-    <!-- PRICING (MVP) -->
     <section id="pricing" class="section reveal">
       <div class="container-max" style="text-align:center">
         <h2>Pricing</h2>
@@ -120,17 +118,16 @@
       </div>
     </section>
 
-    <!-- WAITLIST / EMAIL CAPTURE -->
     <section id="waitlist" class="waitlist reveal">
       <div class="container-max">
         <h2 style="text-align:center">Reserve Your Spot</h2>
         <p class="muted" style="text-align:center">Be the first to try FanForge. Early signups get priority access.</p>
-        <form id="waitlistForm" class="form" onsubmit="return false;">
+        <form id="waitlistForm" class="form">
           <input id="w_name" type="text" placeholder="Your name (optional)">
           <input id="w_email" type="email" placeholder="Your email" required>
           <button id="w_submit" type="submit">Reserve Your Spot</button>
         </form>
-        <div id="waitlistMsg" style="margin-top:12px;color:var(--muted)"></div>
+        <div id="waitlistMsg" style="margin-top:12px;color:var(--accent); font-weight: bold;"></div>
       </div>
     </section>
 
@@ -151,17 +148,6 @@
     </section>
 
     <section class="section reveal">
-      <h2>What You Can Do</h2>
-      <ul class="features">
-        <li>Follow your favourite stars, teams, music artists, and universes</li>
-        <li>Receive real-time updates and exclusive content</li>
-        <li>Be part of private fan spaces</li>
-        <li>Unlock premium fan experiences</li>
-        <li>Connect deeper than any social media platform</li>
-      </ul>
-    </section>
-
-    <section class="section reveal">
       <h2>Categories on FanForge</h2>
       <div class="categories">
         <div class="cat"><strong>🎬 Celebrities</strong><br>Actors, actresses, creators, influencers</div>
@@ -169,22 +155,6 @@
         <div class="cat"><strong>🏏 Sports</strong><br>Players, teams, leagues, tournaments</div>
         <div class="cat"><strong>🌌 Universes</strong><br>Movies, franchises, characters, fandom worlds</div>
       </div>
-    </section>
-
-    <section class="section reveal">
-      <h2>Premium, But For Everyone</h2>
-      <p class="muted">FanForge is designed to be accessible, not elite.</p>
-      <p class="muted">Start free.<br>Upgrade when you want more.<br>Pay only for what you love.</p>
-      <p class="muted">No hidden costs.<br>No unnecessary noise.</p>
-      <p class="muted">Built for India. Ready for the World.</p>
-      <p class="muted">India has the strongest fan culture on the planet.<br>FanForge is built for that energy. From cinema to cricket. From music to global fandoms.</p>
-      <a class="primary hero-cta" href="enter-email.html">Join the FanForge Waitlist</a>
-    </section>
-
-    <section class="section reveal">
-      <h2>Call to Action</h2>
-      <p class="muted">Be there from day one. Early users get priority access, exclusive drops, and founder benefits.</p>
-      <a class="primary hero-cta" href="enter-email.html">Join the FanForge Waitlist</a>
     </section>
 
     <footer class="site-footer reveal">
@@ -201,12 +171,6 @@
           <a href="#">Categories</a>
         </div>
         <div class="col links">
-          <h4>Company</h4>
-          <a href="#">About</a>
-          <a href="#">Careers</a>
-          <a href="#">Blog</a>
-        </div>
-        <div class="col links">
           <h4>Legal</h4>
           <a href="#">Privacy</a>
           <a href="#">Terms</a>
@@ -218,6 +182,20 @@
       </div>
     </footer>
   </main>
+
+  <div id="successOverlay" class="success-overlay" aria-hidden="true">
+    <div class="overlay-content">
+      <div class="scan-line"></div>
+      <h2 class="glitch-text" data-text="ACCESS GRANTED">ACCESS GRANTED</h2>
+      <p id="type-id" class="system-msg"></p>
+      <p id="type-status" class="system-msg"></p>
+      <button class="primary" style="margin-top:30px" onclick="closeSuccess()">RETURN TO HUB</button>
+    </div>
+  </div>
+
+  <audio id="glitchSound" preload="auto">
+    <source src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3" type="audio/mpeg">
+  </audio>
 
   <script src="scripts.js"></script>
 </body>
