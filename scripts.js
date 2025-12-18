@@ -1,181 +1,267 @@
-// Page entrance animation trigger
+/**
+ * FANFORGE CORE SCRIPTS
+ * Includes: Page Animations, Typewriter Engine, 
+ * Mobile Navigation, and Success Sequences.
+ */
+
+// --- 1. TYPEWRITER & ANIMATION ENGINE ---
+
+/**
+ * Types text into an element character by character
+ */
+function typeWriter(elementId, text, speed = 50) {
+  let i = 0;
+  const element = document.getElementById(elementId);
+  if (!element) return Promise.resolve();
+  
+  element.innerHTML = "";
+  return new Promise((resolve) => {
+    function type() {
+      if (i < text.length) {
+        element.innerHTML += text.charAt(i);
+        i++;
+        setTimeout(type, speed);
+      } else { 
+        resolve(); 
+      }
+    }
+    type();
+  });
+}
+
+/**
+ * Triggers the Cyberpunk Success Overlay Sequence
+ */
+async function triggerSuccessSequence() {
+  const overlay = document.getElementById('successOverlay');
+  const sound = document.getElementById('glitchSound');
+  
+  // Play digital notification sound
+  if (sound) { 
+    sound.volume = 0.2; 
+    sound.play().catch(() => {
+      console.log("Audio playback requires user interaction first.");
+    }); 
+  }
+  
+  // Show the scan overlay
+  if (overlay) {
+    overlay.classList.add('active');
+    document.body.style.overflow = 'hidden'; // Lock background scroll
+  }
+  
+  // Run typewriter lines sequentially
+  await typeWriter("type-id", "ID: FAN-FORGE-FOUNDER-2025", 40);
+  await typeWriter("type-status", "STATUS: PRIORITY ACCESS SECURED", 40);
+}
+
+/**
+ * Closes the success overlay
+ */
+window.closeSuccess = function() {
+  const overlay = document.getElementById('successOverlay');
+  if (overlay) {
+    overlay.classList.remove('active');
+    document.body.style.overflow = ''; // Restore scroll
+  }
+};
+
+
+// --- 2. PAGE INITIALIZATION & GLOBAL UI ---
+
 document.addEventListener('DOMContentLoaded', function(){
-  try{ document.documentElement.classList.add('has-loaded'); }catch(e){}
-  // small additional class to allow staggered effects later
-  setTimeout(function(){ try{ document.documentElement.classList.add('is-ready'); }catch(e){} }, 60);
-  // Scroll reveal using IntersectionObserver
-  try{
+  
+  // Page entrance trigger
+  try { document.documentElement.classList.add('has-loaded'); } catch(e){}
+
+  // Header Scroll Effect (HUD Blur)
+  const header = document.querySelector('.site-header');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 50) {
+      header?.classList.add('scrolled');
+    } else {
+      header?.classList.remove('scrolled');
+    }
+  });
+
+  // Scroll Reveal Observer
+  try {
     const revealItems = document.querySelectorAll('.reveal');
-    if(revealItems && revealItems.length){
-      const io = new IntersectionObserver((entries)=>{
-        entries.forEach((en)=>{
-          if(en.isIntersecting){
+    if(revealItems.length) {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((en) => {
+          if(en.isIntersecting) {
             en.target.classList.add('in-view');
-            // optionally unobserve so animation runs once
             io.unobserve(en.target);
           }
         });
-      }, { threshold: 0.12 });
-      revealItems.forEach((el)=> io.observe(el));
+      }, { threshold: 0.15 });
+      revealItems.forEach((el) => io.observe(el));
     }
-  }catch(e){}
-  // Track visit: create or reuse client id and POST visit to server (no UI shown)
-  try{
-    var cidKey = 'fanforge_cid';
-    var cid = null;
-    try{ cid = localStorage.getItem(cidKey); }catch(e){}
-    if(!cid){
-      cid = 'c_' + Math.random().toString(36).slice(2,12) + Date.now().toString(36).slice(-4);
-      try{ localStorage.setItem(cidKey, cid); }catch(e){}
-    }
-    // fire-and-forget POST
-    fetch('/visit', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ clientId: cid })
-    }).catch(function(){});
-  }catch(e){}
-});
+  } catch(e){}
 
-// Mobile hamburger toggle and smooth scrolling
-document.addEventListener('DOMContentLoaded', function(){
-  function byId(id){return document.getElementById(id)}
-  var btn = byId('hamburgerBtn');
-  var nav = byId('mobileNav');
-  if(btn && nav){
-    btn.addEventListener('click', function(){ nav.classList.add('open'); nav.setAttribute('aria-hidden','false'); });
+  // Mobile Hamburger Logic
+  const btn = document.getElementById('hamburgerBtn');
+  const nav = document.getElementById('mobileNav');
+  const closeBtn = document.getElementById('mobileClose');
+
+  if(btn && nav) {
+    btn.addEventListener('click', () => {
+      nav.classList.add('open');
+      nav.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    });
   }
-  var closeBtn = byId('mobileClose');
-  if(closeBtn && nav){ closeBtn.addEventListener('click', function(){ nav.classList.remove('open'); nav.setAttribute('aria-hidden','true'); }); }
 
-  // local page variants
-  var btnL = byId('hamburgerBtnLocal'); var navL = byId('mobileNavLocal'); var closeL = byId('mobileCloseLocal');
-  if(btnL && navL){ btnL.addEventListener('click', function(){ navL.classList.add('open'); navL.setAttribute('aria-hidden','false'); }); }
-  if(closeL && navL){ closeL.addEventListener('click', function(){ navL.classList.remove('open'); navL.setAttribute('aria-hidden','true'); }); }
+  if(closeBtn && nav) {
+    closeBtn.addEventListener('click', () => {
+      nav.classList.remove('open');
+      nav.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    });
+  }
 
-  // Smooth scroll for anchor links
-  document.querySelectorAll('a[href^="#"]').forEach(function(a){
-    a.addEventListener('click', function(e){
-      var href = a.getAttribute('href');
-      if(href && href.startsWith('#')){
-        var el = document.querySelector(href);
-        if(el){ e.preventDefault(); el.scrollIntoView({behavior:'smooth', block:'start'}); }
+  // Smooth Scroll for Anchor Links
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', function(e) {
+      const href = this.getAttribute('href');
+      if(href && href.startsWith('#')) {
+        const el = document.querySelector(href);
+        if(el) {
+          e.preventDefault();
+          if(nav) nav.classList.remove('open');
+          document.body.style.overflow = '';
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
       }
     });
   });
 
-  // initialize AOS if present
-  try{ if(window.AOS) window.AOS.init(); }catch(e){}
+  // Visit Tracking (Fire-and-forget)
+  try {
+    const cidKey = 'fanforge_cid';
+    let cid = localStorage.getItem(cidKey);
+    if(!cid) {
+      cid = 'c_' + Math.random().toString(36).slice(2,12) + Date.now().toString(36).slice(-4);
+      localStorage.setItem(cidKey, cid);
+    }
+    fetch('/visit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ clientId: cid })
+    }).catch(() => {});
+  } catch(e){}
+
+  // Initialize AOS if external library is loaded
+  try { if(window.AOS) window.AOS.init(); } catch(e){}
 });
 
-// Shared navigation and behavior for the three pages.
+
+// --- 3. FORM & BUSINESS LOGIC ---
+
 (function(){
-  // safe DOM helpers
-  function id(n){return document.getElementById(n)}
+  const id = (n) => document.getElementById(n);
 
-  // On index page: Proceed button
-  var proceed = id('proceedBtn');
-  if(proceed){
-    proceed.addEventListener('click', function(){
-      window.location = 'enter-email.html';
-    });
-    return;
+  // Index Page Proceed Button
+  const proceed = id('proceedBtn');
+  if(proceed) {
+    proceed.addEventListener('click', () => window.location = 'enter-email.html');
   }
 
-  // Waitlist form on frontpage: client-side capture (no backend required)
-  var waitlistForm = id('waitlistForm');
-  if(waitlistForm){
-    var wName = id('w_name');
-    var wEmail = id('w_email');
-    var wMsg = id('waitlistMsg');
-    waitlistForm.addEventListener('submit', function(e){
+  // Waitlist Form Logic
+  const waitlistForm = id('waitlistForm');
+  if(waitlistForm) {
+    waitlistForm.addEventListener('submit', function(e) {
       e.preventDefault();
-      var name = (wName && wName.value || '').trim();
-      var email = (wEmail && wEmail.value || '').trim();
-      var ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-      if(!ok){ if(wMsg) wMsg.textContent = 'Please enter a valid email.'; return; }
-      // store locally as a simple waitlist (array)
-      try{
-        var list = JSON.parse(localStorage.getItem('fanforge_waitlist') || '[]');
-        list.push({name: name, email: email, ts: Date.now()});
-        localStorage.setItem('fanforge_waitlist', JSON.stringify(list));
-        if(wMsg) wMsg.textContent = 'Thanks — you are reserved! We will email updates.';
-        waitlistForm.reset();
-      }catch(err){ if(wMsg) wMsg.textContent = 'Saved locally. Thank you!'; }
-    });
-    return;
-  }
-
-  // On enter-email page: handle form -> POST to /subscribe
-  var emailForm = id('emailForm');
-  if(emailForm){
-    var input = id('emailInput');
-    var err = id('emailError');
-    emailForm.addEventListener('submit', function(e){
-      e.preventDefault();
-      var v = (input.value || '').trim();
-      var ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
-      if(!ok){
-        err.textContent = 'Please enter a valid email address.';
+      const submitBtn = id('w_submit');
+      const wEmail = id('w_email');
+      const wMsg = id('waitlistMsg');
+      
+      if(submitBtn) submitBtn.innerText = 'INITIALIZING...';
+      
+      const email = (wEmail?.value || '').trim();
+      const ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      
+      if(!ok) {
+        if(wMsg) wMsg.textContent = 'Invalid access protocol (Email format error).';
+        if(submitBtn) submitBtn.innerText = 'RETRY ACCESS';
         return;
       }
-      err.textContent = '';
-      // Save locally as fallback
-      try{ localStorage.setItem('fanforge_email', v); } catch(_){ }
 
-      // POST to backend
+      try {
+        // Save to LocalStorage
+        const list = JSON.parse(localStorage.getItem('fanforge_waitlist') || '[]');
+        list.push({ email: email, ts: Date.now() });
+        localStorage.setItem('fanforge_waitlist', JSON.stringify(list));
+        
+        // Trigger Cyberpunk Success Overlay
+        triggerSuccessSequence();
+        
+        waitlistForm.reset();
+        if(submitBtn) {
+          submitBtn.innerText = 'ACCESS GRANTED';
+          submitBtn.style.borderColor = 'var(--accent)';
+        }
+      } catch(err) {
+        if(wMsg) wMsg.textContent = 'Local backup saved.';
+      }
+    });
+  }
+
+  // Email Subscription Form (Direct Entry)
+  const emailForm = id('emailForm');
+  if(emailForm) {
+    emailForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const input = id('emailInput');
+      const err = id('emailError');
+      const v = (input?.value || '').trim();
+      
+      if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) {
+        if(err) err.textContent = 'Valid email required.';
+        return;
+      }
+
+      try { localStorage.setItem('fanforge_email', v); } catch(e){}
+
       fetch('/subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: v })
-      }).then(function(r){
-        if(!r.ok) throw new Error('network');
-        return r.json();
-      }).then(function(data){
-        window.location = 'plans.html';
-      }).catch(function(){
-        // If network fails, still continue using localStorage
-        window.location = 'plans.html';
-      });
+      })
+      .then(() => window.location = 'plans.html')
+      .catch(() => window.location = 'plans.html');
     });
-    return;
   }
 
-  // On plans page: show saved email and handle plan choice -> POST plan
-  var savedLine = id('savedEmailLine');
-  if(savedLine){
-    var email = null;
-    try{ email = localStorage.getItem('fanforge_email'); } catch(_){ }
-    if(email){
-      savedLine.textContent = 'Email: ' + email;
-    } else {
-      savedLine.textContent = 'No email provided. You can go back and enter your mail id.';
-    }
+  // Plans Page Interaction
+  const savedLine = id('savedEmailLine');
+  if(savedLine) {
+    let email = null;
+    try { email = localStorage.getItem('fanforge_email'); } catch(e){}
+    savedLine.textContent = email ? 'Verified ID: ' + email : 'Unauthorized: No email provided.';
 
-    var buttons = document.querySelectorAll('.choose');
-    buttons.forEach(function(btn){
-      btn.addEventListener('click', function(){
-        var plan = btn.getAttribute('data-plan') || 'Plan';
-        var payload = { plan: plan };
+    document.querySelectorAll('.choose').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const plan = this.getAttribute('data-plan') || 'Plan';
+        this.innerText = 'CONNECTING...';
+        
+        const payload = { plan: plan };
         if(email) payload.email = email;
 
         fetch('/subscribe', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
-        }).then(function(r){
-          if(!r.ok) throw new Error('network');
-          return r.json();
-        }).then(function(resp){
-          if(resp && resp.counted){
-            alert('Payment action recorded. Thank you!');
-          } else if(resp && resp.counted === false){
-            alert('You already clicked Pay for this plan before.');
-          } else {
-            alert('Thanks — you selected "' + plan + '".');
-          }
-        }).catch(function(){
-          alert('Saved locally: "' + plan + '" (offline mode).');
+        })
+        .then(r => r.json())
+        .then(resp => {
+          alert('Data transmission complete: ' + plan);
+          this.innerText = 'CHOSEN';
+        })
+        .catch(() => {
+          alert('Local storage override: ' + plan);
+          this.innerText = 'SAVED OFFLINE';
         });
       });
     });
